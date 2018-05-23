@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<!--
+*
+* Copyright (C) 2015, bitmovin GmbH, All Rights Reserved
+*
+* Created on: 2015-07-25 11:35:04
+* Author:     bitmovin GmbH <dash-player@bitmovin.net>
+*
+* This source code and its use and distribution, is subject to the terms
+* and conditions of the applicable license agreement.
+*
+* Modified by Brian Tsang 
+-->
+<html lang="en">
+<head>
+    <title>Bitmovin Demo - Adversting Scheudling with Analytics</title>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400" rel="stylesheet">
+    <link rel="icon" type="image/png" href="images/bit-fav.png">
+    <link rel="stylesheet" href="./css/styles.css">
+    <!-- Bitmovin Player -->
+    <script type="text/javascript"
+            src="//bitmovin-a.akamaihd.net/bitmovin-player/stable/7.6/bitmovinplayer.js"></script>
+    <!-- Bitmovin Analytics -->
+    <script type="text/javascript"
+            src="//bitmovin-a.akamaihd.net/bitmovin-analytics/stable/1.5.3/bitmovinanalytics.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js"></script>
+    <script src="realtime.js"></script>
+    <script src="//code.highcharts.com/highcharts.js"></script>
+</head>
+<body>
+<div id="wrapper">
+    <div id="banner">
+        <div class="logo"><img src="images/bitmovin-logo.png"></div>
+        <div class="title"><h1>Bitmovin Demo - Ad Scheduling</h1></div>
+        <div class="clear"></div>
+    </div>
+    <div class="container">
+        <h2>This demonstration covers Bitmovin Player’s ad insertion capabilities.</h2>
+        <p>By using Bitmovin Player's API, one could freely schedule ads in different position. </br>
+            Bitmovin player supports playback of different advertising standards, includes VAST, VPAID, IMA and
+            VMAP.</br>
+            Try it for yourself, select the desired position and Ad standards then hit Schedule AD. To clear, hit Reset
+            Configuration</p>
+        <div class="controls">
+            <div class="row">
+                <div class="col-sm-6 mb-3">
+                    <select id="adType" class="form-control">
+                        <option selected="selected" value="vast">VAST</option>
+                        <option value="vpaid">VPAID</option>
+                        <option value="vmap">VMAP</option>
+                        <option value="ima">IMA</option>
+                    </select>
+                    <select id="schedule-list" class="form-control">
+                        <option selected="selected" value="pre">Ad position : pre-roll (0%)</option>
+                        <option value="5%">Ad position : mid-roll(5%)</option>
+                        <option value="10%">Ad position : mid-roll(10%)</option>
+                        <option value="post">Ad position : post-roll (100%)</option>
+                    </select>
+                    <input id="scheudle-ad-button" class="btn btn-success mr-3 mt-2" type="button" value="Schedule AD">
+                    <input id="reset-button" class="btn btn-warning mt-2" type="button" value="Reset Configuration">
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div id="ad-error"></div>
+            </div>
+            <div class="col-md-12">
+                <div id="ad-warning"></div>
+            </div>
+        </div>
+
+        <br/><br/>
+        <div class="content">
+            <div class="player-window-main">
+                <div id="player"></div>
+            </div>
+            <div class="description">
+                <p>For more information about the bitmovin player, please have a look at our online <a
+                        href="//bitmovin.com/support" target="_blank">Developer Section</a>.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1>Analytics for Adaptive Streaming</h1>
+        <h2>
+            Monitor the quality of your service in realtime and spot errors before your users do!</h2>
+        <div id="webserver-warning">
+            <div class="ca-content">
+                <h1>
+                    Unsupported Protocol</h1>
+                <h2>
+                    This file has been loaded using the unsupported "file" protocol. Please use a <a
+                        href="http://wiki.selfhtml.org/wiki/Webserver/lokal" target="_blank">
+                    web server</a>
+                    and open this page using http or https.</h2>
+            </div>
+        </div>
+        <div class="content">
+            <div class="description">
+                <p>Analytics Infrastructure</p>
+                <!--<button onclick="toggle('analytics-infra-picture-wrapper')">Toggle</button>-->
+            </div>
+            <div class="player-grid">
+                <div id="analytics-infra-picture-wrapper" class="player-grid" style="box-shadow: none">
+                    <img src="./analytics-infrastructure.png" width="100%"/>
+                </div>
+            </div>
+            <div class="description">
+                <p>Video Statistics</p>
+                <button onclick="toggle('video-information-table-wrapper')">Toggle</button>
+            </div>
+            <div id="video-information-table-wrapper" class="player-grid">
+                <table id="video-information-table">
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+            <div class="description">
+                <p>Client Information</p>
+                <button onclick="toggle('information-wrapper')">Toggle</button>
+            </div>
+            <div id="information-wrapper" class="player-grid wrapper-closed">
+                <div class="information">
+                    <table id="information-table">
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="description">
+                <p>Adaptation Behaviour Graph</p>
+                <button onclick="toggle('adaptation-behaviour-wrapper')">Toggle</button>
+            </div>
+            <div id="adaptation-behaviour-wrapper" class="player-grid" style="margin-top: 30px">
+                <div id="adaptation-behaviour"></div>
+            </div>
+            <div class="description">
+                <p>Impression Log</p>
+                <button onclick="toggle('impression-log-wrapper')">Toggle</button>
+            </div>
+            <div id="impression-log-wrapper" class="player-grid wrapper-closed" style="margin-top: 30px">
+                <div id="impression-log">
+                    <table id="impression-log-table">
+                        <thead>
+                        <tr>
+                            <th>State</th>
+                            <th>Player Startuptime</th>
+                            <th>Video Startuptime</th>
+                            <th>Duration</th>
+                            <th>Buffered</th>
+                            <th>Video Time Start</th>
+                            <th>Video Time End</th>
+                            <th>Played</th>
+                            <th>Paused</th>
+                            <th>Seeked</th>
+                            <th>Video Bitrate</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="description">
+                <p>Query responses from Bitmovin API</p>
+                <button onclick="toggle('backend-calls-wrapper')">Toggle</button>
+            </div>
+            <div id="backend-calls-wrapper" class="player-grid wrapper-closed" style="margin-top: 30px">
+                <div id="backend-calls">
+                    <table id="backend-calls-table">
+                        <tbody style="display: block">
+                        <tr></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- javascript -->
+<script type="text/javascript">
+
+    if (location.protocol === 'file:') {
+        document.getElementById('webserver-warning').style.display = 'block';
+    }
+    var t = new Date().getTime();
+    // declare bitmovin analytics & player
+    var bitanalyticsConfig = {
+        key: '4c744af6-b741-4edd-9c41-c7daa8d7fd2a',
+        playerKey: '3c40c5d4-5107-4df0-92a9-b4dce564aeb5',
+        player: bitmovin.analytics.Players.BITMOVIN,
+        cdnProvider: bitmovin.analytics.CdnProviders.AKAMAI,
+        videoId: 'BRIAN-DEMO-' + t,
+        customData1: 'SESSION' + t
+    };
+
+    var conf = {
+        key: '3c40c5d4-5107-4df0-92a9-b4dce564aeb5',
+        playback: {
+            muted: true
+        },
+        source: {
+            dash: 'https://bitdash-a.akamaihd.net/content/MI201109210084_1/mpds/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.mpd',
+            hls: 'https://bitdash-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8',
+            progressive: 'https://bitdash-a.akamaihd.net/content/MI201109210084_1/MI201109210084_mpeg-4_hd_high_1080p25_10mbits.mp4',
+            poster: 'https://bitdash-a.akamaihd.net/content/MI201109210084_1/poster.jpg'
+        },
+        style: {
+            width: '100%',
+            aspectratio: '16:9'
+        },
+        events: {
+            onAdError: function (err) {
+                document.querySelector('#ad-error').innerHTML = 'Ad-Error:' + err.message;
+            },
+            onWarning: function (err) {
+                document.querySelector('#ad-warning').innerHTML = err.message;
+            }
+        }
+    };
+
+    var analytics = bitmovin.analytics(bitanalyticsConfig);
+    var player = bitmovin.player("player");
+
+    document.querySelector('#scheudle-ad-button').addEventListener('click', loadConfig);
+    document.querySelector('#reset-button').addEventListener('click', removeSchedule);
+
+
+    // Instrument the Player with Analytics
+    analytics.register(player)
+    player.setup(conf).then(function (value) {
+        console.log('Successfully created Bitmovin Player instance, session:' + t); // Success!
+    }, function (reason) {
+        console.log('Error while creating Bitmovin Player instance'); // Error!
+    });
+
+
+    function resetAdError() {
+        document.querySelector('#ad-error').innerHTML = '';
+    }
+
+    function loadConfig() {
+        resetAdError();
+        var adType = document.getElementById('adType').value || 'vast';
+        var schedule = document.getElementById('schedule-list').value;
+        if (schedule) {
+            switch (adType) {
+                case 'ima': {
+                    manifestUrl = '//pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/124319096/external/single_ad_samples&ciu_szs=300x250&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1&cust_params=deployment%3Ddevsite%26sample_ct%3Dlinear&correlator=[random]';
+                    break;
+                }
+                case 'vmap': {
+                    manifestUrl = '//pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/124319096/external/ad_rule_samples&ciu_szs=300x250&ad_rule=1&impl=s&gdfp_req=1&env=vp&output=vmap&unviewed_position_start=1&cust_params=deployment%3Ddevsite%26sample_ar%3Dpreonly&cmsid=496&vid=short_onecue&correlator=[random]';
+                    break;
+                }
+                case 'vpaid': {
+                    // same as VAST
+                    manifestUrl = '//pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/32573358/skippable_ad_unit&impl=s&gdfp_req=1&env=vp&output=xml_vast2&unviewed_position_start=1&url=http%3A%2F%2Freleasetest.dash-player.com%2Fads%2F&description_url=[description_url]&correlator=[random]';
+                    break;
+                }
+                default: {
+                    // reset to VAST
+                    manifestUrl = '//pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/32573358/skippable_ad_unit&impl=s&gdfp_req=1&env=vp&output=xml_vast2&unviewed_position_start=1&url=http%3A%2F%2Freleasetest.dash-player.com%2Fads%2F&description_url=[description_url]&correlator=[random]';
+                    document.getElementById('adType').value = 'vast';
+                }
+            }
+
+            // vmap is handled as ima tag
+            if (adType === 'vmap') {
+                adType = 'ima';
+            }
+            player.scheduleAd(manifestUrl, adType, {
+                'timeOffset': document.getElementById('schedule-list').value,
+                'pertistant': true,
+                'adMessage': 'This ad will end in {remainingTime} seconds',
+            });
+        }
+        player.play();
+    }
+
+    function removeSchedule() {
+        resetAdError();
+        player.destroy();
+        player = bitmovin.player('player');
+        player.setup({
+            key: '3c40c5d4-5107-4df0-92a9-b4dce564aeb5',
+            playback: {
+                muted: true
+            },
+            source: {
+                dash: '//bitmovin-a.akamaihd.net/content/MI201109210084_1/mpds/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.mpd',
+                hls: '//bitmovin-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8',
+                progressive: '//bitmovin-a.akamaihd.net/content/MI201109210084_1/MI201109210084_mpeg-4_hd_high_1080p25_10mbits.mp4',
+                poster: '//bitmovin-a.akamaihd.net/content/art-of-motion_drm/art-of-motion_poster.jpg'
+            },
+            style: {
+                width: '100%',
+                aspectratio: '16:9'
+            },
+            events: {
+                onAdError: function (err) {
+                    document.querySelector('#ad-error').innerHTML = 'Ad-Error:' + err.message;
+                },
+                onWarning: function (err) {
+                    document.querySelector('#ad-warning').innerHTML = err.message;
+                }
+            }
+        });
+    }
+</script>
+
+<script>
+    var BITMOVIN_API_KEY = 'd8e098d1-85e3-4b49-aa13-f8ac8acb443c';
+    var BITMOVIN_PLAYER_KEY = '3c40c5d4-5107-4df0-92a9-b4dce564aeb5';
+    var BITMOVIN_ANALYTICS_KEY = '4c744af6-b741-4edd-9c41-c7daa8d7fd2a';
+
+    (function () {
+        if (location.protocol === "file:") {
+            document.getElementById("webserver-warning").style.display = "block";
+            return;
+        }
+
+        var realtime = new Realtime();
+        realtime.start();
+    })();
+</script>
+<script>
+    function toggle(divToToggleId) {
+        var div = document.getElementById(divToToggleId);
+        div.style.display = div.style.display == "none" ? "block" : "none";
+    }
+
+    (function closeDivs(divs) {
+        for (var i = 0; i < divs.length; i++) {
+            divs[i].style.display = "none";
+        }
+    })(document.getElementsByClassName("wrapper-closed"))
+</script>
+<!-- End of javascript -->
+</body>
+</html>

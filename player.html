@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <meta charset="utf-8">
+   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+   <title>Bitmovin V7 Player (DASH / HLS / MP4)</title>
+   <script src="https://bitmovin-a.akamaihd.net/bitmovin-player/stable/7/bitmovinplayer.js"></script>
+   <link rel="stylesheet" href="./css/styles.css">
+</head>
+<body>
+<div id="wrapper">
+        <div id="banner">
+            <div class="logo"><img src="images/bitmovin-logo.png"></div>
+            <div class="title"><h1>Bitmovin HTML5 Player</h1></div>
+            <div class="clear"></div>
+        </div>
+    
+            <div class="container">
+                    <h2>Multi-Codec Support H.264/HEVC/VP9</h1>
+                    <div class="content">
+                        <div class="player-wrapper">
+                            <!-- dynamic text by js -->
+                            <div class="title"><h4>H.264/AVC</h4><div id="player1"></div></div>
+                            <div class="title"><h4>VP9</h4><div id="player2"></div></div>
+                        </div>
+                    </div>
+            </div>    
+</div>
+
+<script type="text/javascript">
+    // Browser detection
+    // Chrome 1+
+    var isChrome = !!window.chrome && !!window.chrome.webstore;
+    // Firefox 1.0+
+    var isFirefox = typeof InstallTrigger !== 'undefined';
+    // Safari
+    var isSafari = /constructor/i.test(window.HTMLElement) || (function (p) { return p.toString() === "[object SafariRemoteNotification]"; })(!window['safari'] || (typeof safari !== 'undefined' && safari.pushNotification));
+    var player = bitmovin.player("player1");
+    var conf = {
+        key: "3c40c5d4-5107-4df0-92a9-b4dce564aeb5",
+        playback: {
+            autoplay: true,
+            muted: true
+        },
+        source: {
+                  dash: 'https://bitmovin-a.akamaihd.net/content/multi-codec/h264/stream.mpd',
+                  hls: 'https://bitdash-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8',
+                  progressive: 'https://bitdash-a.akamaihd.net/content/MI201109210084_1/MI201109210084_mpeg-4_hd_high_1080p25_10mbits.mp4',
+  
+        },
+    };
+    
+   player.setup(conf).then(function (value) {
+       console.log("Successfully created bitmovin player1 instance");
+   }, function (reason) {
+       console.log("Error while creating bitmovin player1 instance");
+   });
+</script>
+<script type="text/javascript">
+    var player = bitmovin.player("player2");
+    var vp9 = 'http://bitmovin-a.akamaihd.net/content/multi-codec/vp9/stream.mpd';
+    var hvec = 'http://bitmovin-a.akamaihd.net/content/dataset/multi-codec/hevc/stream.mpd';
+    var defaultDash = 'http://bitdash-a.akamaihd.net/content/MI201109210084_1/mpds/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.mpd';
+    
+    if (isChrome) {
+        condecSource = vp9;
+    } else if (isFirefox) {
+        condecSource = vp9;
+    } else if (isSafari) {
+        condecSource = hvec;
+        document.getElementsByTagName("h4")[1].innerHTML = "H.265/HVEC";
+    } else {
+        condecSource = defaultDash;
+    }
+
+    var conf = {
+       key: "3c40c5d4-5107-4df0-92a9-b4dce564aeb5",
+       playback: {
+            autoplay: true,
+            muted: true
+        },
+       source: {
+                 dash: condecSource,
+                 hls: 'https://bitdash-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8',
+                 progressive: 'https://bitdash-a.akamaihd.net/content/MI201109210084_1/MI201109210084_mpeg-4_hd_high_1080p25_10mbits.mp4',
+  
+       }
+    };
+   
+    player.setup(conf).then(function (value) {
+        console.log("Successfully created bitmovin player2 instance");
+    }, function (reason) {
+        console.log("Error while creating bitmovin player2 instance");
+    });
+ </script>
+</body>
+</html>

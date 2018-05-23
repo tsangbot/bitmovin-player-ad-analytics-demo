@@ -27,7 +27,7 @@
     <script type="text/javascript"
             src="//bitmovin-a.akamaihd.net/bitmovin-analytics/stable/1.5.3/bitmovinanalytics.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js"></script>
-    <script src="realtime.js"></script>
+    <!--<script src="realtime.js"></script>-->
     <script src="//code.highcharts.com/highcharts.js"></script>
 </head>
 <body>
@@ -104,21 +104,18 @@
         <div class="content">
             <div class="description">
                 <p>Analytics Infrastructure</p>
-                <!--<button onclick="toggle('analytics-infra-picture-wrapper')">Toggle</button>-->
+                <button onclick="toggle('analytics-infra-picture-wrapper')">Toggle</button>
             </div>
-            <div class="player-grid">
-                <div id="analytics-infra-picture-wrapper" class="player-grid" style="box-shadow: none">
+                <div id="analytics-infra-picture-wrapper" class="player-grid wrapper-closed" style="box-shadow: none">
                     <img src="./analytics-infrastructure.png" width="100%"/>
                 </div>
-            </div>
             <div class="description">
                 <p>Video Statistics</p>
                 <button onclick="toggle('video-information-table-wrapper')">Toggle</button>
             </div>
-            <div id="video-information-table-wrapper" class="player-grid">
+            <div id="video-information-table-wrapper" class="player-grid wrapper-closed">
                 <table id="video-information-table">
                     <tbody>
-
                     </tbody>
                 </table>
             </div>
@@ -126,7 +123,7 @@
                 <p>Client Information</p>
                 <button onclick="toggle('information-wrapper')">Toggle</button>
             </div>
-            <div id="information-wrapper" class="player-grid wrapper-closed">
+            <div id="information-wrapper" class="player-grid">
                 <div class="information">
                     <table id="information-table">
                         <tbody>
@@ -236,7 +233,7 @@
 
 
     // Instrument the Player with Analytics
-    analytics.register(player)
+    analytics.register(player);
     player.setup(conf).then(function (value) {
         console.log('Successfully created Bitmovin Player instance, session:' + t); // Success!
     }, function (reason) {
@@ -318,7 +315,7 @@
     }
 </script>
 
-<script>
+<script type="text/javascript">
     var BITMOVIN_API_KEY = 'd8e098d1-85e3-4b49-aa13-f8ac8acb443c';
     var BITMOVIN_PLAYER_KEY = '3c40c5d4-5107-4df0-92a9-b4dce564aeb5';
     var BITMOVIN_ANALYTICS_KEY = '4c744af6-b741-4edd-9c41-c7daa8d7fd2a';
@@ -333,7 +330,8 @@
         realtime.start();
     })();
 </script>
-<script>
+
+<script type="text/javascript">
     function toggle(divToToggleId) {
         var div = document.getElementById(divToToggleId);
         div.style.display = div.style.display == "none" ? "block" : "none";
@@ -345,6 +343,7 @@
         }
     })(document.getElementsByClassName("wrapper-closed"))
 </script>
-<!-- End of javascript -->
+
+ <!--End of javascript-->
 </body>
 </html>

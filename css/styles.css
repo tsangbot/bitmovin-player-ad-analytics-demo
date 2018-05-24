@@ -32,6 +32,12 @@
   white-space: nowrap;
 }
 
+ .title1 {
+     margin: auto;
+     width: 100%;
+     max-width: 700px;
+ }
+
 .clear {
   clear: both;
 }
@@ -73,7 +79,8 @@ h1, h2, h3, p {
 
 .player-wrapper{
     margin: auto;
-    width:1250px;
+    width: 80%;
+    max-width: 1500px;
     height:240px;
     padding:10px;
 }
@@ -99,6 +106,7 @@ h1, h2, h3, p {
 }
 
 #player1{
+    width: 100%;
     -webkit-box-shadow: 0px 0px 56px 0px rgba(0, 0, 0, 0.75);
     -moz-box-shadow: 0px 0px 56px 0px rgba(0, 0, 0, 0.75);
     box-shadow: 0px 0px 56px 0px rgba(0, 0, 0, 0.75);
@@ -106,6 +114,7 @@ h1, h2, h3, p {
 }
 
 #player2{
+    width: 100%;
     -webkit-box-shadow: 0px 0px 56px 0px rgba(0, 0, 0, 0.75);
     -moz-box-shadow: 0px 0px 56px 0px rgba(0, 0, 0, 0.75);
     box-shadow: 0px 0px 56px 0px rgba(0, 0, 0, 0.75);
@@ -137,7 +146,7 @@ a:hover {
 
 .col-sm-6.mb-3,.col-md-12 {
   margin: auto;
-  width: 40%;
+  width: 20%;
   padding: 5px;
 }
 
@@ -184,11 +193,7 @@ a:hover {
  .wrapper-closed {
      display: none;
  }
- .player-wrapper {
-     width: 50%;
-     margin-right: auto;
-     margin-left: auto;
- }
+
 
  .player-window-main {
      width: 60%;

@@ -189,6 +189,12 @@ a:hover {
      margin-right: auto;
      margin-left: auto;
  }
+
+ .player-window-main {
+     width: 60%;
+     margin-right: auto;
+     margin-left: auto;
+ }
  #webserver-warning {
      margin: 50px;
      padding: 20px;

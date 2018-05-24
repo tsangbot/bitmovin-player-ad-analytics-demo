@@ -1,13 +1,10 @@
 # bitmovin-player-ad-analytics-demo
 
-[![bitmovin](http://bitmovin-a.akamaihd.net/webpages/bitmovin-logo-github.png)](http://www.bitmovin.com)
-[![codecov](https://codecov.io/gh/bitmovin/bitmovin-javascript/branch/develop/graph/badge.svg?token=XNzQalljOE)](https://codecov.io/gh/bitmovin/bitmovin-javascript)
-[![npm version](https://badge.fury.io/js/bitmovin-javascript.svg)](https://badge.fury.io/js/bitmovin-javascript)
-[![Build Status](https://travis-ci.org/bitmovin/bitmovin-javascript.svg?branch=develop)](https://travis-ci.org/bitmovin/bitmovin-javascript)
+
 
 Overview
 ---------
-This repo contains 3 demos created to cover the use case exercise
+This repo contains 3 demos:
 
 - Adverting Scheduling and Analytics with Bitmovin Player - index.html
 - Multi-codec Streaming H.264/HEVC/VP9  with Bitmomovin Player - multi-codec.html
@@ -22,7 +19,8 @@ If you are like myself running on a MAC (which has pre-installed apache), then y
 
 
 
-To use this demo, you must posses an account with Bitmovin.[Sign up](https://dashboard.bitmovin.com/signup)for a trial account.
+To use this demo, you must posses an account with Bitmovin.
+[Sign up](https://dashboard.bitmovin.com/signup) for a trial account.
 Once you have set up your account, find retrieve the 3 keys 
 
 - [Bitmovin API Key ](https://dashboard.bitmovin.com/account)

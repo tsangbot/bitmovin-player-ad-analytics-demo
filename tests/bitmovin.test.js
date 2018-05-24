@@ -56,7 +56,7 @@ describe('Bitmovin default exports', () => {
     assertItContains('licenses')
     assertItContains('queries')
   })
-  describe('player', () => {
+  describe('multi-codec', () => {
     const assertItContains = (key) => {
       it('should contain ' + key, () => {
         expect(typeof client.player[key]).toEqual('function');

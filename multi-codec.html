@@ -28,6 +28,10 @@
 </div>
 
 <script type="text/javascript">
+
+    // BITMOVING KEY(S)
+    const BITMOVIN_PLAYER_KEY = '3c40c5d4-5107-4df0-92a9-b4dce564aeb5';
+
     // Browser detection
     // Chrome 1+
     var isChrome = !!window.chrome && !!window.chrome.webstore;
@@ -37,7 +41,7 @@
     var isSafari = /constructor/i.test(window.HTMLElement) || (function (p) { return p.toString() === "[object SafariRemoteNotification]"; })(!window['safari'] || (typeof safari !== 'undefined' && safari.pushNotification));
     var player = bitmovin.player("player1");
     var conf = {
-        key: "3c40c5d4-5107-4df0-92a9-b4dce564aeb5",
+        key: BITMOVIN_PLAYER_KEY,
         playback: {
             autoplay: true,
             muted: true
@@ -55,8 +59,7 @@
    }, function (reason) {
        console.log("Error while creating bitmovin player1 instance");
    });
-</script>
-<script type="text/javascript">
+
     var player = bitmovin.player("player2");
     var vp9 = 'http://bitmovin-a.akamaihd.net/content/multi-codec/vp9/stream.mpd';
     var hvec = 'http://bitmovin-a.akamaihd.net/content/dataset/multi-codec/hevc/stream.mpd';
@@ -74,7 +77,7 @@
     }
 
     var conf = {
-       key: "3c40c5d4-5107-4df0-92a9-b4dce564aeb5",
+       key: BITMOVIN_PLAYER_KEY,
        playback: {
             autoplay: true,
             muted: true

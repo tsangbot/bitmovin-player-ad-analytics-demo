@@ -195,6 +195,11 @@
         document.getElementById('webserver-warning').style.display = 'block';
     }
     var t = new Date().getTime();
+    // BITMOVING KEY(S)
+    const BITMOVIN_API_KEY = 'd8e098d1-85e3-4b49-aa13-f8ac8acb443c';
+    const BITMOVIN_PLAYER_KEY = '3c40c5d4-5107-4df0-92a9-b4dce564aeb5';
+    const BITMOVIN_ANALYTICS_KEY = '4c744af6-b741-4edd-9c41-c7daa8d7fd2a';
+
 
     document.querySelector('#scheudle-ad-button').addEventListener('click', loadConfig);
     document.querySelector('#reset-button').addEventListener('click', removeSchedule);
@@ -252,9 +257,6 @@
 </script>
 
 <script type="text/javascript">
-    var BITMOVIN_API_KEY = 'd8e098d1-85e3-4b49-aa13-f8ac8acb443c';
-    var BITMOVIN_PLAYER_KEY = '3c40c5d4-5107-4df0-92a9-b4dce564aeb5';
-    var BITMOVIN_ANALYTICS_KEY = '4c744af6-b741-4edd-9c41-c7daa8d7fd2a';
 
     (function () {
         if (location.protocol === "file:") {

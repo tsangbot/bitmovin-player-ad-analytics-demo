@@ -14,7 +14,7 @@ import {getConfiguration} from '../utils';
 
 let testConfiguration = getConfiguration();
 
-describe('player', () => {
+describe('multi-codec', () => {
   beforeEach(testSetup);
 
   describe('custom-builds', () => {

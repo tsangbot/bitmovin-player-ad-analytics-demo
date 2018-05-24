@@ -21,7 +21,7 @@ export const statements = (configuration, http) => {
     },
     player: {
       list: (limit, offset) => {
-        let url = urljoin(statementsBaseUrl, 'player');
+        let url = urljoin(statementsBaseUrl, 'multi-codec');
         let getParams = utils.buildGetParamString({
           limit: limit,
           offset: offset

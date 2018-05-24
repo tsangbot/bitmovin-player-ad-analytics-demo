@@ -11,7 +11,7 @@ import {
 
 let testConfiguration = getConfiguration();
 
-describe('player', () => {
+describe('multi-codec', () => {
   const statisticsClient = statistics(testConfiguration, mockHttp);
   beforeEach(testSetup);
 

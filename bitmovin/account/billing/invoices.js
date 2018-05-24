@@ -21,7 +21,7 @@ export const invoices = (configuration, http) => {
     },
     player: {
       list: (limit, offset) => {
-        let url = urljoin(invoicesBaseUrl, 'player');
+        let url = urljoin(invoicesBaseUrl, 'multi-codec');
         let getParams = utils.buildGetParamString({
           limit: limit,
           offset: offset

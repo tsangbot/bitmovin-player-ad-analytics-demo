@@ -21,7 +21,7 @@ import {thirdPartyLicensing} from '../../bitmovin/player/thirdPartyLicensing';
 
 let testConfiguration = getConfiguration();
 
-describe('player', () => {
+describe('multi-codec', () => {
   const licensesClient = licenses(testConfiguration, mockHttp);
   beforeEach(testSetup);
 

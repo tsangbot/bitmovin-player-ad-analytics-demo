@@ -4,7 +4,7 @@ import yargs from "yargs";
 const argv  = yargs.option(
     'interval', {
         alias: 'i',
-        describe: 'choose a range',
+        describe: 'choose a range from "MINUTE, HOUR, DAY, MONTH"',
         choices: ['MINUTE', 'HOUR', 'DAY', 'MONTH'],
         demand: true
     }
@@ -17,25 +17,28 @@ const argv  = yargs.option(
         demand: true
     }
 ).option(
-    'queryObject',{
-        alias: 'q',
-        describe: 'choose a specific object to lookup',
+    'metric',{
+        alias: 'm',
+        describe: 'choose a specific mertric "IMPRESSION_ID","USER_ID","PLAYED"',
         choices: ['IMPRESSION_ID','USER_ID','PLAYED'],
         demand: true
     }
-).argv
+).argv;
+
+// BITMOVING KEY(S)
+const BITMOVIN_API_KEY = 'd8e098d1-85e3-4b49-aa13-f8ac8acb443c';
 
 
-console.log(argv.interval, argv.daysToLookback, argv.queryObject);
+console.log(argv.interval, argv.daysToLookback, argv.metric);
 
 const moment = require('moment');
-const bitmovin = new Bitmovin({ apiKey: 'd8e098d1-85e3-4b49-aa13-f8ac8acb443c' });
+const bitmovin = new Bitmovin({ apiKey: BITMOVIN_API_KEY });
 const queryBuilder = bitmovin.analytics.queries.builder;
 
-const query = queryBuilder.count(argv.queryObject)
+const query = queryBuilder.count(argv.metric)
   .between(moment().subtract(argv.daysToLookback, 'day').toDate(), moment().toDate())
   .interval(argv.interval)
-  .query() // this returns a JavaScript Promise
+  .query();// this returns a JavaScript Promise
 
 query.then((results) => {
   // results.rows contains the result set

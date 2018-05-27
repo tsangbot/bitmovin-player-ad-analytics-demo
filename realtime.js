@@ -64,6 +64,8 @@ var Realtime = function () {
         events: {
             onReady: handleOnReady,
             onPlay: handleOnPlay,
+            onAdBreakStarted: handleOnReady,
+            onAdBreakFinished: handleOnPlay,
             onPlaybackFinished: function () {
                 window.clearTimeout(onPlayTimeout);
                 window.clearInterval(impressionPollingInterval);

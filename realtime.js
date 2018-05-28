@@ -34,6 +34,8 @@ var IMPRESSION_POLLING_INTERVAL = 1000;
 var firstImpressionPollingInterval = true;
 var videoStartupTimeSet = false;
 var firstImpressionPollingTimeout;
+var t = new Date().getTime();
+var s = 0;
 
 var Realtime = function () {
     var analyticsConfig = {
@@ -52,10 +54,9 @@ var Realtime = function () {
             muted: true
         },
         source: {
-            dash: '//bitmovin-a.akamaihd.net/content/MI201109210084_1/mpds/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.mpd',
-            hls: '//bitmovin-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8',
-            progressive: '//bitmovin-a.akamaihd.net/content/MI201109210084_1/MI201109210084_mpeg-4_hd_high_1080p25_10mbits.mp4',
-            poster: '//bitmovin-a.akamaihd.net/content/MI201109210084_1/poster.jpg'
+            "dash": "https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd",
+            "hls": "https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8",
+            poster: '//upload.wikimedia.org/wikipedia/commons/d/dc/Sintel_1920x1080.png'
         },
         style: {
             width: '100%',
@@ -64,11 +65,13 @@ var Realtime = function () {
         events: {
             onReady: handleOnReady,
             onPlay: handleOnPlay,
-            onAdBreakStarted: handleOnReady,
-            onAdBreakFinished: handleOnPlay,
+            onAdStarted: handleOnReady,
+            onAdFinished: handleOnPlay,
+            onAdSkipped: handleOnSkipped,
             onPlaybackFinished: function () {
                 window.clearTimeout(onPlayTimeout);
                 window.clearInterval(impressionPollingInterval);
+
             },
             onAdError: function (err) {
                 document.querySelector('#ad-error').innerHTML = 'Ad-Error:' + err.message;
@@ -79,6 +82,10 @@ var Realtime = function () {
         }
     };
 
+    function handleOnSkipped(){
+        console.log("Ad skipped!!");
+        setAdSkipped(s += 1);
+    }
 
     function handleOnReady() {
         getCurrentImpression(function (currentImpression) {
@@ -147,12 +154,21 @@ var Realtime = function () {
             if (impressionRows[i].startuptime > 0 && impressionRows[i].video_startuptime > 0) {
                 videoStartupTimeSet = true;
 
-                var informationTableId = 'informationTable';
+                var informationTableId = 'information-table';
                 appendRowToTable(informationTableId, createKeyValueTableRow('Video Startup time', impressionRows[i].video_startuptime + 'ms'));
                 appendRowToTable(informationTableId, createKeyValueTableRow('Total Startup time', impressionRows[i].startuptime + 'ms'));
                 break;
             }
         }
+    }
+
+
+
+    function setAdSkipped(noAdSkipped) {
+                var informationTableId = 'information-table';
+                appendRowToTable(informationTableId, createKeyValueTableRow('Ad Skipped', noAdSkipped));
+
+
     }
 
     function insertImpressionDiffToLog(impressionDiff) {
@@ -200,21 +216,7 @@ var Realtime = function () {
         hljs.highlightBlock(cellDiv);
     }
 
-    function createKeyValueTableRow(key, value) {
-        var row = document.createElement("tr");
 
-        var keyCell = document.createElement("td");
-        var keyCellText = document.createTextNode(key);
-        keyCell.appendChild(keyCellText);
-        row.appendChild(keyCell);
-
-        var valueCell = document.createElement("td");
-        var valueCellText = document.createTextNode(value);
-        valueCell.appendChild(valueCellText);
-        row.appendChild(valueCell);
-
-        return row;
-    }
 
     function createTableRow(cells) {
         var row = document.createElement("tr");
@@ -406,9 +408,7 @@ var Realtime = function () {
         });
     }
 
-    function appendRowToTable(tableId, row) {
-        document.getElementById(tableId).getElementsByTagName('tbody')[0].appendChild(row);
-    }
+
 
     this.start = function () {
         analytics = bitmovin.analytics(analyticsConfig);

@@ -30,7 +30,7 @@
 var analytics, player, currentImpressionChart, lastImpression;
 var onPlayTimeout, impressionPollingInterval;
 var ON_PLAY_TIMEOUT_DELAY = 300;
-var IMPRESSION_POLLING_INTERVAL = 1000;
+var IMPRESSION_POLLING_INTERVAL = 3000;
 var firstImpressionPollingInterval = true;
 var videoStartupTimeSet = false;
 var firstImpressionPollingTimeout;
@@ -38,13 +38,12 @@ var t = new Date().getTime();
 var s = 0;
 
 
-
 function handleOnSkipped(){
     console.log("Ad skipped!!");
     setAdSkipped(s += 1);
 }
 
-function handleOnReady() {
+function handleOnReady(tableName) {
     getCurrentImpression(function (currentImpression) {
         if (currentImpression && firstImpressionPollingInterval && currentImpression.length > 0) {
             firstImpressionPollingInterval = false;
@@ -92,7 +91,7 @@ function handleOnPlay() {
     }, ON_PLAY_TIMEOUT_DELAY);
 }
 
-function setStaticImpressionData(impressionRow) {
+function setStaticImpressionData(impressionRow, tableName) {
     var informationTableId = 'information-table';
 
     appendRowToTable(informationTableId, createKeyValueTableRow('City', impressionRow.city));
@@ -170,7 +169,6 @@ function insertImpressionQueryResponseJson(impressionRow) {
 
     document.getElementById('backend-calls-table').getElementsByTagName('tbody')[0].getElementsByTagName('tr')[0].appendChild(keyCell);
 
-    hljs.highlightBlock(cellDiv);
 }
 
 

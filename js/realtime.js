@@ -39,8 +39,9 @@ var s = 0;
 
 
 function handleOnSkipped(){
-    console.log("Ad skipped!!");
     setAdSkipped(s += 1);
+    console.log("Ad skipped!!");
+
 }
 
 function handleOnReady(tableName) {
@@ -121,7 +122,7 @@ function setVideoStartupTime(impressionRows) {
 
 
 function setAdSkipped(noAdSkipped) {
-    var informationTableId = 'information-table';
+    var informationTableId = 'ad-information-table';
     appendRowToTable(informationTableId, createKeyValueTableRow('Ad Skipped', noAdSkipped));
 
 

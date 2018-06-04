@@ -29,11 +29,16 @@
 
 var analytics, player, currentImpressionChart, lastImpression;
 var onPlayTimeout, impressionPollingInterval;
-var ON_PLAY_TIMEOUT_DELAY = 300;
-var IMPRESSION_POLLING_INTERVAL = 3000;
+var analytics2, player2, currentImpressionChart2, lastImpression2;
+var onPlayTimeout2, impressionPollingInterval2;
+var ON_PLAY_TIMEOUT_DELAY = 500;
+var IMPRESSION_POLLING_INTERVAL = 5000;
+var PLAYER_2_IMPRESSION_POLLING_INTERVAL = 8030;
 var firstImpressionPollingInterval = true;
-var videoStartupTimeSet = false;
+var firstImpressionPollingInterval2 = true;
+var videoStartupTimeSet, videoStartupTimeSet2 = false;
 var firstImpressionPollingTimeout;
+var firstImpressionPollingTimeout2;
 var t = new Date().getTime();
 var s = 0;
 
@@ -44,14 +49,14 @@ function handleOnSkipped(){
 
 }
 
-function handleOnReady(tableName) {
+function handleOnReady() {
     getCurrentImpression(function (currentImpression) {
         if (currentImpression && firstImpressionPollingInterval && currentImpression.length > 0) {
             firstImpressionPollingInterval = false;
-            setStaticImpressionData(currentImpression[0]);
+            setStaticImpressionData(currentImpression[0],'information-table');
         } else {
             window.clearTimeout(firstImpressionPollingTimeout);
-            firstImpressionPollingTimeout = window.setTimeout(handleOnReady, 1000);
+            firstImpressionPollingTimeout = window.setTimeout(handleOnReady, 3000);
         }
     });
 }
@@ -68,10 +73,10 @@ function handleOnPlay() {
                 var series = currentImpressionChart.series[0];
 
                 if (!videoStartupTimeSet) {
-                    setVideoStartupTime(currentImpression);
+                    setVideoStartupTime(currentImpression,'information-table');
                 }
 
-                insertImpressionDiffToLog(impressionDiff);
+                insertImpressionDiffToLog(impressionDiff,'impression-log-table');
 
                 for (var i = 0; i < impressionDiff.length; i++) {
                     if (impressionDiff[i].state.toLowerCase().indexOf('playing') < 0) {
@@ -92,8 +97,57 @@ function handleOnPlay() {
     }, ON_PLAY_TIMEOUT_DELAY);
 }
 
+function handleOnReady2() {
+    getCurrentImpression2(function (currentImpression2) {
+        if (currentImpression2 && firstImpressionPollingInterval2 && currentImpression2.length > 0) {
+            firstImpressionPollingInterval2 = false;
+            setStaticImpressionData(currentImpression2[0],'information-table-2');
+        } else {
+            window.clearTimeout(firstImpressionPollingTimeout2);
+            firstImpressionPollingTimeout2 = window.setTimeout(handleOnReady2, 6000);
+        }
+    });
+}
+
+function handleOnPlay2() {
+    if (onPlayTimeout2) {
+        return;
+    }
+
+    onPlayTimeout2 = window.setTimeout(function () {
+        impressionPollingInterval2 = window.setInterval(function () {
+            getCurrentImpression2(function (currentImpression2) {
+                var impressionDiff2 = getImpressionDiff2(lastImpression2, currentImpression2);
+                var series = currentImpressionChart2.series[0];
+
+                if (!videoStartupTimeSet2) {
+                    setVideoStartupTime(currentImpression2, 'information-table-2');
+                }
+
+                insertImpressionDiffToLog(impressionDiff2, 'impression-log-table-2');
+
+                for (var i = 0; i < impressionDiff2.length; i++) {
+                    if (impressionDiff2[i].state.toLowerCase().indexOf('playing') < 0) {
+                        continue;
+                    }
+
+                    var videoTimeStart = impressionDiff2[i].videotime_start / 1000;
+                    var videoTimeEnd = impressionDiff2[i].videotime_end / 1000;
+                    var videoBitrate = impressionDiff2[i].video_bitrate;
+
+                    series.addPoint([videoTimeStart, videoBitrate]);
+                    series.addPoint([videoTimeEnd, videoBitrate]);
+                }
+
+                lastImpression2 = currentImpression2;
+            });
+        }, PLAYER_2_IMPRESSION_POLLING_INTERVAL)
+    }, ON_PLAY_TIMEOUT_DELAY);
+}
+
+
 function setStaticImpressionData(impressionRow, tableName) {
-    var informationTableId = 'information-table';
+    var informationTableId = tableName;
 
     appendRowToTable(informationTableId, createKeyValueTableRow('City', impressionRow.city));
     appendRowToTable(informationTableId, createKeyValueTableRow('Browser', impressionRow.browser));
@@ -106,18 +160,21 @@ function setStaticImpressionData(impressionRow, tableName) {
     appendRowToTable(informationTableId, createKeyValueTableRow('Player Startup Time', impressionRow.player_startuptime + 'ms'));
 }
 
-function setVideoStartupTime(impressionRows) {
+function setVideoStartupTime(impressionRows, tableName) {
     for (var i = 0; i < impressionRows.length; i++) {
         if (impressionRows[i].startuptime > 0 && impressionRows[i].video_startuptime > 0) {
             videoStartupTimeSet = true;
+            if (tableName.endsWith("-2")) {videoStartupTimeSet2 = true;}
 
-            var informationTableId = 'information-table';
+            var informationTableId = tableName;
             appendRowToTable(informationTableId, createKeyValueTableRow('Video Startup time', impressionRows[i].video_startuptime + 'ms'));
             appendRowToTable(informationTableId, createKeyValueTableRow('Total Startup time', impressionRows[i].startuptime + 'ms'));
             break;
         }
     }
 }
+
+
 
 
 
@@ -128,15 +185,15 @@ function setAdSkipped(noAdSkipped) {
 
 }
 
-function insertImpressionDiffToLog(impressionDiff) {
+function insertImpressionDiffToLog(impressionDiff, tableName) {
     for (var i = 0; i < impressionDiff.length; i++) {
-        insertImpressionLogRow(impressionDiff[i]);
-        insertImpressionQueryResponseJson(impressionDiff[i]);
+        insertImpressionLogRow(impressionDiff[i], tableName);
+        insertImpressionQueryResponseJson(impressionDiff[i], tableName);
     }
 }
 
-function insertImpressionLogRow(impressionRow) {
-    var impressionLogTableId = 'impression-log-table';
+function insertImpressionLogRow(impressionRow, tableName) {
+    var impressionLogTableId = tableName;
 
     var cells = [];
     cells.push(impressionRow.state);
@@ -154,7 +211,8 @@ function insertImpressionLogRow(impressionRow) {
     appendRowToTable(impressionLogTableId, createTableRow(cells));
 }
 
-function insertImpressionQueryResponseJson(impressionRow) {
+function insertImpressionQueryResponseJson(impressionRow, tableName) {
+    var backEndTableName = (tableName.endsWith('-2')) ? 'backend-calls-table-2':'backend-calls-table';
     var pre = document.createElement("pre");
     pre.style.textAlign = 'left';
     var code = document.createElement("code");
@@ -168,7 +226,7 @@ function insertImpressionQueryResponseJson(impressionRow) {
     var keyCell = document.createElement("td");
     keyCell.appendChild(cellDiv);
 
-    document.getElementById('backend-calls-table').getElementsByTagName('tbody')[0].getElementsByTagName('tr')[0].appendChild(keyCell);
+    document.getElementById(backEndTableName).getElementsByTagName('tbody')[0].getElementsByTagName('tr')[0].appendChild(keyCell);
 
 }
 
@@ -188,6 +246,31 @@ function createTableRow(cells) {
 }
 
 function getImpressionDiff(lastImpression, currentImpression) {
+    if (!lastImpression) {
+        return currentImpression;
+    }
+
+    var impressionDiff = [];
+
+    for (var i = 0; i < currentImpression.length; i++) {
+        var clientTime = currentImpression[i].client_time;
+        var found = false;
+        for (var j = 0; j < lastImpression.length; j++) {
+            if (lastImpression[j].client_time === clientTime) {
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            impressionDiff.push(currentImpression[i]);
+        }
+    }
+
+    return impressionDiff;
+}
+
+
+function getImpressionDiff2(lastImpression, currentImpression) {
     if (!lastImpression) {
         return currentImpression;
     }
@@ -291,14 +374,45 @@ function getAvgRebuffering(videoId, tableName) {
     });
 }
 
-function getCurrentImpression(callback) {
-    var currentImpressionid = analytics.getCurrentImpressionId();
+function getCurrentImpression2(callback) {
+    var currentImpressionid = analytics2.getCurrentImpressionId();
+    console.log(currentImpressionid);
     if (!currentImpressionid) {
         if (callback) {
             callback();
         }
         return;
     }
+
+
+    var xhr = new XMLHttpRequest();
+    var url = 'https://api.bitmovin.com/v1/analytics/impressions/' + currentImpressionid;
+    xhr.open('GET', url, true);
+
+    xhr.setRequestHeader('X-Api-Key', BITMOVIN_API_KEY);
+
+    xhr.onload = function () {
+        if (callback) {
+            var bitmovinResponse = JSON.parse(this.responseText);
+            var analyticsResponse = bitmovinResponse.data.result;
+            callback(analyticsResponse);
+        }
+    };
+
+    xhr.send();
+}
+
+
+function getCurrentImpression(callback) {
+    var currentImpressionid = analytics.getCurrentImpressionId();
+    console.log(currentImpressionid);
+    if (!currentImpressionid) {
+        if (callback) {
+            callback();
+        }
+        return;
+    }
+
 
     var xhr = new XMLHttpRequest();
     var url = 'https://api.bitmovin.com/v1/analytics/impressions/' + currentImpressionid;
@@ -362,6 +476,36 @@ function initCurrentImpressionChart(divId) {
             data: []
         }]
     });
+
+}
+
+function initCurrentImpressionChart2(divId) {
+    currentImpressionChart2 = Highcharts.chart(divId, {
+        title: {
+            text: ''
+        },
+        yAxis: {
+            title: {
+                text: 'Bitrate'
+            },
+            plotLines: [{
+                value: 0,
+                width: 1,
+                color: '#ff0000'
+            }]
+        },
+        legend: {
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'middle',
+            borderWidth: 0
+        },
+        series: [{
+            name: 'bitrate',
+            data: []
+        }]
+    });
+
 }
 
 function scheduleAd(noAdSkipped) {

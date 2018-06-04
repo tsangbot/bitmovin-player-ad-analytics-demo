@@ -194,6 +194,9 @@ a:hover {
      display: none;
  }
 
+ .player-grid wrapper-closed{
+     width: 350px;
+ }
 
  .player-window-main {
      width: 60%;
@@ -213,7 +216,7 @@ a:hover {
  table {
      color: #333;
      border-collapse: collapse;
-     width: 100%;
+     width: 350px;
      border-spacing: 0;
  }
  td, th {

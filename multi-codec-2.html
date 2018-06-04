@@ -176,7 +176,6 @@
                         </div>
                     </div>
                 </div>
-
                 </div>
             </div>
         </div>
@@ -205,86 +204,82 @@
     var hvec = 'http://bitmovin-a.akamaihd.net/content/dataset/multi-codec/hevc/stream.mpd';
     var defaultDash = 'http://bitdash-a.akamaihd.net/content/MI201109210084_1/mpds/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.mpd';
 
-
-    var Realtime = function () {
-        var analyticsConfig1 = {
-            key: BITMOVIN_ANALYTICS_KEY,
-            playerKey: BITMOVIN_PLAYER_KEY,
-            player: bitmovin.analytics.Players.BITMOVIN,
-            cdnProvider: bitmovin.analytics.CdnProviders.AKAMAI,
-            videoId: 'CODEC-DEMO-1-' + t,
-            customData1: 'CODEC-DEMO1-SESSION' + t,
-            userId: 'CODEC-USER1',
-            debug : true
-        };
-
-        var playerConfig1 = {
-            key: BITMOVIN_PLAYER_KEY,
-            playback: {
-                autoplay: true,
-                muted: true
-
-            },
-            source: {
-                dash: 'https://bitmovin-a.akamaihd.net/content/multi-codec/h264/stream.mpd',
-                hls: 'https://bitdash-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8',
-                progressive: 'https://bitdash-a.akamaihd.net/content/MI201109210084_1/MI201109210084_mpeg-4_hd_high_1080p25_10mbits.mp4',
-            },
-            style: {
-                width: '100%',
-                aspectratio: '16:9'
-            },
-            events: {
-                onReady: handleOnReady,
-                onPlay: handleOnPlay,
-                onPlaybackFinished: function () {
-                    window.clearTimeout(onPlayTimeout);
-                    window.clearInterval(impressionPollingInterval);
-
-                }
-            }
-        };
-
-        this.start = function () {
-            analytics = bitmovin.analytics(analyticsConfig1);
-            player = bitmovin.player('player1');
-
-            analytics.register(player);
-            player.setup(playerConfig1);
-
-            initCurrentImpressionChart('adaptation-behaviour');
-            // getVideoStatistics(analyticsConfig1.videoId, 'video-information-table');
-        };
-    };
-
     var condecSource;
-     if (isChrome) {
-         condecSource = vp9;
-     } else if (isFirefox) {
-         condecSource = vp9;
-     } else if (isSafari) {
-         condecSource = hvec;
-         document.getElementsByTagName("h4")[1].innerHTML = "H.265/HVEC";
-     } else {
-         condecSource = defaultDash;
-     }
+    if (isChrome) {
+        condecSource = vp9;
+    } else if (isFirefox) {
+        condecSource = vp9;
+    } else if (isSafari) {
+        condecSource = hvec;
+        document.getElementsByTagName("h4")[1].innerHTML = "H.265/HVEC";
+    } else {
+        condecSource = defaultDash;
+    }
+
+    // var Realtime = function () {
+    //     var analyticsConfig = {
+    //         key: BITMOVIN_ANALYTICS_KEY,
+    //         playerKey: BITMOVIN_PLAYER_KEY,
+    //         player: bitmovin.analytics.Players.BITMOVIN,
+    //         cdnProvider: bitmovin.analytics.CdnProviders.AKAMAI,
+    //         videoId: 'CODEC-DEMO-1' + t,
+    //         customData1: 'CODEC-DEMO1-SESSION' + t,
+    //         userId: 'CODEC-USER1'
+    //     };
+    //
+    //     var playerConfig = {
+    //         key: BITMOVIN_PLAYER_KEY,
+    //         playback: {
+    //             muted: true
+    //         },
+    //         source: {
+    //             dash: 'https://bitmovin-a.akamaihd.net/content/multi-codec/h264/stream.mpd',
+    //             hls: 'https://bitdash-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8',
+    //             progressive: 'https://bitdash-a.akamaihd.net/content/MI201109210084_1/MI201109210084_mpeg-4_hd_high_1080p25_10mbits.mp4',
+    //         },
+    //         style: {
+    //             width: '100%',
+    //             aspectratio: '16:9'
+    //         },
+    //         events: {
+    //             onReady: handleOnReady,
+    //             onPlay: handleOnPlay,
+    //             onPlaybackFinished: function () {
+    //                 window.clearTimeout(onPlayTimeout);
+    //                 window.clearInterval(impressionPollingInterval);
+    //
+    //             }
+    //         }
+    //     };
+    //
+    //     this.start = function () {
+    //         analytics = bitmovin.analytics(analyticsConfig);
+    //         player = bitmovin.player('player1');
+    //
+    //         analytics.register(player);
+    //         player.setup(playerConfig);
+    //
+    //         initCurrentImpressionChart('adaptation-behaviour');
+    //         getVideoStatistics(analyticsConfig.videoId, 'video-information-table');
+    //     };
+    // };
+
+
 
     var Realtime2 = function () {
-        var analyticsConfig2 = {
+        var analyticsConfig = {
             key: BITMOVIN_ANALYTICS_KEY,
             playerKey: BITMOVIN_PLAYER_KEY,
             player: bitmovin.analytics.Players.BITMOVIN,
             cdnProvider: bitmovin.analytics.CdnProviders.AKAMAI,
             videoId: 'CODEC-DEMO-2-' + t,
             customData1: 'CODEC-DEMO2-SESSION' + t,
-            userId: 'CODEC-USER2',
-            debug : true
+            userId: 'CODEC-USER2'
         };
 
-        var playerConfig2 = {
+        var playerConfig = {
             key: BITMOVIN_PLAYER_KEY,
             playback: {
-                autoplay: false,
                 muted: true
             },
             source: {
@@ -300,101 +295,109 @@
                 onReady: handleOnReady2,
                 onPlay: handleOnPlay2,
                 onPlaybackFinished: function () {
-                    window.clearTimeout(onPlayTimeout2);
-                    window.clearInterval(impressionPollingInterval2);
+                    window.clearTimeout(onPlayTimeout);
+                    window.clearInterval(impressionPollingInterval);
 
                 }
             }
         };
 
         this.start = function () {
-            analytics2 = bitmovin.analytics(analyticsConfig2);
-            player2 = bitmovin.player('player2');
+            analytics = bitmovin.analytics(analyticsConfig);
+            player = bitmovin.player('player2');
 
-            analytics2.register(player2);
-            player2.setup(playerConfig2);
+            analytics.register(player);
+            player.setup(playerConfig);
 
             initCurrentImpressionChart2('adaptation-behaviour-2');
-            // getVideoStatistics(analyticsConfig2.videoId, 'video-information-table-2');
+            getVideoStatistics2(analyticsConfig.videoId, 'video-information-table-2');
         };
     };
 
 
-    // PLAYERS 1,2
-    //
-    //  var player = bitmovin.player("player1");
-    //  var conf = {
-    //      key: BITMOVIN_PLAYER_KEY,
-    //      playback: {
-    //          autoplay: true,
-    //          muted: true
-    //      },
-    //      source: {
-    //                dash: 'https://bitmovin-a.akamaihd.net/content/multi-codec/h264/stream.mpd',
-    //                hls: 'https://bitdash-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8',
-    //                progressive: 'https://bitdash-a.akamaihd.net/content/MI201109210084_1/MI201109210084_mpeg-4_hd_high_1080p25_10mbits.mp4',
-    //
-    //      },
-    //  };
-    //
-    // player.setup(conf).then(function (value) {
-    //     console.log("Successfully created bitmovin player1 instance");
-    // }, function (reason) {
-    //     console.log("Error while creating bitmovin player1 instance");
-    // });
-    //
-    //  var player = bitmovin.player("player2");
-    //  var vp9 = 'http://bitmovin-a.akamaihd.net/content/multi-codec/vp9/stream.mpd';
-    //  var hvec = 'http://bitmovin-a.akamaihd.net/content/dataset/multi-codec/hevc/stream.mpd';
-    //  var defaultDash = 'http://bitdash-a.akamaihd.net/content/MI201109210084_1/mpds/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.mpd';
-    //
-    //  if (isChrome) {
-    //      condecSource = vp9;
-    //  } else if (isFirefox) {
-    //      condecSource = vp9;
-    //  } else if (isSafari) {
-    //      condecSource = hvec;
-    //      document.getElementsByTagName("h4")[1].innerHTML = "H.265/HVEC";
-    //  } else {
-    //      condecSource = defaultDash;
-    //  }
-    //
-    //  var conf = {
-    //     key: BITMOVIN_PLAYER_KEY,
-    //     playback: {
-    //          autoplay: true,
-    //          muted: true
-    //      },
-    //     source: {
-    //               dash: condecSource,
-    //               hls: 'https://bitdash-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8',
-    //               progressive: 'https://bitdash-a.akamaihd.net/content/MI201109210084_1/MI201109210084_mpeg-4_hd_high_1080p25_10mbits.mp4',
-    //
-    //     }
-    //  };
-    //
-    //  player.setup(conf).then(function (value) {
-    //      console.log("Successfully created bitmovin player2 instance");
-    //  }, function (reason) {
-    //      console.log("Error while creating bitmovin player2 instance");
-    //  });
-</script>
+    // PLAYERS 1
+    var analyticsConfig1 = {
+        key: BITMOVIN_ANALYTICS_KEY,
+        playerKey: BITMOVIN_PLAYER_KEY,
+        player: bitmovin.analytics.Players.BITMOVIN,
+        cdnProvider: bitmovin.analytics.CdnProviders.AKAMAI,
+        videoId: 'CODEC-DEMO-1-' + t,
+        customData1: 'CODEC-DEMO1-SESSION' + t,
+        userId: 'CODEC-USER1'
+    };
+     var player1 = bitmovin.player("player1");
+     var conf1 = {
+         key: BITMOVIN_PLAYER_KEY,
+         playback: {
+             autoplay: true,
+             muted: true
+         },
+         source: {
+                   dash: 'https://bitmovin-a.akamaihd.net/content/multi-codec/h264/stream.mpd',
+                   hls: 'https://bitdash-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8',
+                   progressive: 'https://bitdash-a.akamaihd.net/content/MI201109210084_1/MI201109210084_mpeg-4_hd_high_1080p25_10mbits.mp4',
 
-<script type="text/javascript">
-    (function () {
-        if (location.protocol === "file:") {
-            document.getElementById("webserver-warning").style.display = "block";
-            return;
+         },
+     };
+    analytics1 = bitmovin.analytics(analyticsConfig1);
+    analytics1.register(player1);
+    player1.setup(conf1).then(function (value) {
+        console.log("Successfully created bitmovin player1 instance");
+        console.log(player1.bitrate());
+    }, function (reason) {
+        console.log("Error while creating bitmovin player1 instance");
+    });
+    // end PLAYERS 1
+
+    // PLAYERS 2
+    var analyticsConfig2 = {
+        key: BITMOVIN_ANALYTICS_KEY,
+        playerKey: BITMOVIN_PLAYER_KEY,
+        player: bitmovin.analytics.Players.BITMOVIN,
+        cdnProvider: bitmovin.analytics.CdnProviders.AKAMAI,
+        videoId: 'CODEC-DEMO-2-' + t,
+        customData1: 'CODEC-DEMO2-SESSION' + t,
+        userId: 'CODEC-USER2'
+    };
+     var player2 = bitmovin.player("player2");
+     var vp9 = 'http://bitmovin-a.akamaihd.net/content/multi-codec/vp9/stream.mpd';
+     var hvec = 'http://bitmovin-a.akamaihd.net/content/dataset/multi-codec/hevc/stream.mpd';
+     var defaultDash = 'http://bitdash-a.akamaihd.net/content/MI201109210084_1/mpds/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.mpd';
+
+     if (isChrome) {
+         condecSource = vp9;
+     } else if (isFirefox) {
+         condecSource = vp9;
+     } else if (isSafari) {
+         condecSource = hvec;
+         document.getElementsByTagName("h4")[1].innerHTML = "H.265/HVEC";
+     } else {
+         condecSource = defaultDash;
+     }
+
+     var conf = {
+        key: BITMOVIN_PLAYER_KEY,
+        playback: {
+             autoplay: true,
+             muted: true
+         },
+        source: {
+                  dash: condecSource,
+                  hls: 'https://bitdash-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8',
+                  progressive: 'https://bitdash-a.akamaihd.net/content/MI201109210084_1/MI201109210084_mpeg-4_hd_high_1080p25_10mbits.mp4',
+
         }
+     };
 
-        var realtime = new Realtime();
-        realtime.start();
+    analytics2 = bitmovin.analytics(analyticsConfig2);
+    analytics2.register(player2);
+     player2.setup(conf).then(function (value) {
+         console.log("Successfully created bitmovin player2 instance");
+     }, function (reason) {
+         console.log("Error while creating bitmovin player2 instance");
+     });
+    // end PLAYERS 2
 
-        var realtime2 = new Realtime2();
-
-        window.setTimeout(realtime2.start(), 3000);
-
-    })();
 
 </script>
 
@@ -405,7 +408,21 @@
             <!--return;-->
         <!--}-->
 
-        <!--window.setTimeout-->
+        <!--var realtime = new Realtime();-->
+        <!--realtime.start();-->
+
+    <!--})();-->
+
+<!--</script>-->
+
+<!--<script type="text/javascript">-->
+    <!--(function () {-->
+        <!--if (location.protocol === "file:") {-->
+            <!--document.getElementById("webserver-warning").style.display = "block";-->
+            <!--return;-->
+        <!--}-->
+
+      <!---->
         <!--var realtime2 = new Realtime2();-->
         <!--realtime2.start();-->
     <!--})();-->

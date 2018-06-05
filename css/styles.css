@@ -151,6 +151,7 @@ a:hover {
 }
 
 
+
 /*add more here*/
  figure {
      margin: 0;
@@ -214,9 +215,10 @@ a:hover {
      white-space: nowrap;
  }
  table {
+     margin-left: -40px;
      color: #333;
      border-collapse: collapse;
-     width: 350px;
+     width: 450px;
      border-spacing: 0;
  }
  td, th {

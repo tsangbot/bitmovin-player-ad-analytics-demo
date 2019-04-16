@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>Bitmovin V7 Player (DASH / HLS / MP4)</title>
+    <link rel="stylesheet" href="./css/styles.css">
+    <script src="js/realtime.js" type="text/javascript"></script>
+    <script src="//code.highcharts.com/highcharts.js"></script>
+    <!-- Bitmovin Player -->
+    <script type="text/javascript"
+            src="//bitmovin-a.akamaihd.net/bitmovin-player/stable/7.6/bitmovinplayer.js"></script>
+    <!-- Bitmovin Analytics -->
+    <script type="text/javascript"
+            src="//bitmovin-a.akamaihd.net/bitmovin-analytics/stable/1.5.3/bitmovinanalytics.min.js"></script>
+
+</head>
+<body>
+<div id="wrapper">
+    <div id="banner">
+        <div class="logo"><img src="images/bitmovin-logo.png"></div>
+        <div class="title"><h1>Bitmovin HTML5 Player</h1></div>
+        <div class="clear"></div>
+    </div>
+
+    <div class="container">
+        <h2>Multi-Codec Support H.264/HVEC/VP9</h2>
+        <div class="content">
+            <div class="description">
+                <p>This demo shows the video quality of VP9/H.265(HVEC) compare to H.264(AVC). </br>
+                    Ensuring the quality is not compromised, while significant bitrate reduction is
+                    archived. </br></br></br>
+                    Simply select the desired resolution using the dropdown below and click the "Set Video Resolution"
+                    button.</br>
+                    Logging will show up below each player, when video quality changes.
+                </p>
+            </div>
+        </div>
+        <div class="controls">
+            <div class="row">
+                <div class="col-sm-6 mb-3">
+                    <h4>Set Video Resolution</h4>
+                    <select id="res-list" class="form-control">
+                        <option selected="selected" value="auto">Auto</option>
+                        <option value="180">320x180</option>
+                        <option value="270">480x270</option>
+                        <option value="360">640x360</option>
+                        <option value="480">854x480</option>
+                        <option value="720">1280x720</option>
+                        <option value="1080i">Low 1920x1080</option>
+                        <option value="1080p">High 1920x1080</option>
+                    </select>
+                    <input id="set-res-button" class="btn btn-success mr-3 mt-2" type="button"
+                           value="Set Video Resolution">
+                    <input id="play-button" class="btn btn-success mr-3 mt-2" type="button" value="Start playback in players">
+                    <input id="pause-button" class="btn btn-success mr-3 mt-2" type="button" value="Pause playback in players">
+                    <input id="reset-button" class="btn btn-success mr-3 mt-2" type="button" value="Reset to Auto">
+                    <input id="unmute-button" class="btn btn-success mr-3 mt-2" type="button" value="Un-mute players">
+                </div>
+            </div>
+        </div>
+
+        <div class="player-wrapper">
+            <!-- dynamic text by js -->
+            <div class="title1">
+                <h4>H.264/AVC</h4>
+                <div id="player1"></div>
+                <div class="description">
+                    <p>Video Quality Information</p>
+                </div>
+                <div id="information-wrapper-1" class="player-grid">
+                    <div class="information">
+                        <table id="information-table-1">
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="title1">
+                <h4>VP9</h4>
+                <div id="player2"></div>
+                <div class="description">
+                    <p>Video Quality Information</p>
+                </div>
+                <div id="information-wrapper-2" class="player-grid">
+                    <div class="information">
+                        <table id="information-table-2">
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="content">
+    <div id="information-wrapper" class="player-grid">
+        <div class="information">
+            <table id="information-table">
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div id="ad-error"></div>
+        </div>
+        <div class="col-md-12">
+            <div id="ad-warning"></div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    // BITMOVING KEY(S)
+    const BITMOVIN_PLAYER_KEY = '3d1aeff2-cc32-4eb4-b4e8-0699af6823de';
+    const BITMOVIN_ANALYTICS_KEY = '58add32c-46b7-4a18-8b73-71613c0c33be';
+    var t = new Date().getTime();
+    var player1Quality, player2Quality, targetQuality, dashSource, hlsSource;
+    const vp9 = 'https://bitmovin-a.akamaihd.net/content/multi-codec/vp9/stream.mpd';
+    const hvec = 'https://bitmovin-a.akamaihd.net/webpages/demos/content/multi-codec/hevc/stream_fmp4.m3u8';
+    const defaultDash = 'https://bitdash-a.akamaihd.net/content/MI201109210084_1/mpds/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.mpd';
+    const defaultHLS = 'https://bitdash-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8';
+
+    // Browser detection
+    var BROWSERTYPE = {
+        CHROME: "chrome",
+        EXPLORER: "explorer",
+        EDGE: "edge",
+        FIREFOX: "firefox",
+        OPERA: "opera",
+        SAFARI: "safari"
+    }
+    var browser = getBrowser();
+    
+    function getBrowser() {
+        var detectedBrowser;
+        // Opera 8.0+
+        if ((!!window.opr && !!opr.addons) || !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0) {
+            detectedBrowser = BROWSERTYPE.OPERA;
+        }
+
+        // Firefox 1.0+
+        if (typeof InstallTrigger !== 'undefined') {
+            detectedBrowser = BROWSERTYPE.FIREFOX;
+        }
+
+        // Safari 3.0+ "[object HTMLElementConstructor]" 
+        if ( /constructor/i.test(window.HTMLElement) || (function (p) { return p.toString() === "[object SafariRemoteNotification]"; })(!window['safari'] || (typeof safari !== 'undefined' && safari.pushNotification))){
+            detectedBrowser = BROWSERTYPE.SAFARI;
+        }
+
+        // Internet Explorer 6-11
+        if (/*@cc_on!@*/false || !!document.documentMode) {
+            detectedBrowser = BROWSERTYPE.EXPLORER;
+        }
+
+        // Edge 20+ 
+        if (detectedBrowser != BROWSERTYPE.EXPLORER && !!window.StyleMedia) {
+            detectedBrowser = BROWSERTYPE.EDGE;
+        }
+
+        // Chrome 1 - 71
+        if (!!window.chrome && (!!window.chrome.webstore || !!window.chrome.runtime)) {
+            detectedBrowser = BROWSERTYPE.CHROME;
+        }
+
+        return detectedBrowser;
+    }
+
+    // Resolve DASH and HLS sources
+
+
+    if (browser == BROWSERTYPE.CHROME ) {
+        dashSource = vp9;
+    } else if (browser == BROWSERTYPE.FIREFOX) {
+        dashSource = vp9;
+    } else if (browser == BROWSERTYPE.SAFARI) {
+        hlsSource = hvec;
+        document.getElementsByTagName("h4")[2].innerHTML = "H.265/HVEC";
+    } else {
+        dashSource = defaultDash;
+        hlsSource = defaultHLS;
+    }
+
+    
+    // PLAYERS 1
+    var analyticsConfig1 = {
+        key: BITMOVIN_ANALYTICS_KEY,
+        playerKey: BITMOVIN_PLAYER_KEY,
+        player: bitmovin.analytics.Players.BITMOVIN,
+        cdnProvider: bitmovin.analytics.CdnProviders.AKAMAI,
+        videoId: 'CODEC-DEMO-1-' + t,
+        customData1: 'CODEC-DEMO1-SESSION' + t,
+        userId: 'CODEC-USER1'
+    };
+    var player1 = bitmovin.player("player1");
+    var conf1 = {
+        key: BITMOVIN_PLAYER_KEY,
+        playback: {
+            autoplay: false,
+            muted: true,
+        },
+        source: {
+            dash: 'https://bitmovin-a.akamaihd.net/content/multi-codec/h264/stream.mpd',
+            hls: 'https://bitdash-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8',
+            progressive: 'https://bitdash-a.akamaihd.net/content/MI201109210084_1/MI201109210084_mpeg-4_hd_high_1080p25_10mbits.mp4',
+        },
+        events: {
+            onVideoPlaybackQualityChanged: function (targetQuality) {
+                appendRowToTable('information-table-1',
+                    createKeyValueTableRow('Video Quality changed:',
+                        ' Bitrate: ' + targetQuality.targetQuality.bitrate.valueOf() +
+                        ' Resolution: ' + targetQuality.targetQuality.height.valueOf()
+                    ));
+            },
+            onWarning: function (err) {
+                document.querySelector('#ad-warning').innerHTML = err.message;
+            }
+        }
+    };
+    analytics1 = bitmovin.analytics(analyticsConfig1);
+    analytics1.register(player1);
+    player1.setup(conf1).then(function (value) {
+        console.log("Successfully created bitmovin player1 instance");
+    }, function (reason) {
+        console.log("Error while creating bitmovin player1 instance");
+    });
+    // end PLAYERS 1
+    // PLAYERS 2
+    var analyticsConfig2 = {
+        key: BITMOVIN_ANALYTICS_KEY,
+        playerKey: BITMOVIN_PLAYER_KEY,
+        player: bitmovin.analytics.Players.BITMOVIN,
+        cdnProvider: bitmovin.analytics.CdnProviders.AKAMAI,
+        videoId: 'CODEC-DEMO-2-' + t,
+        customData1: 'CODEC-DEMO2-SESSION' + t,
+        userId: 'CODEC-USER2'
+    };
+    var player2 = bitmovin.player("player2");
+    var conf = {
+        key: BITMOVIN_PLAYER_KEY,
+        playback: {
+            autoplay: false,
+            muted: true,
+        },
+        source: {
+            dash: dashSource,
+            hls: hlsSource,
+            progressive: 'https://bitdash-a.akamaihd.net/content/MI201109210084_1/MI201109210084_mpeg-4_hd_high_1080p25_10mbits.mp4',
+        },
+        events: {
+            onVideoPlaybackQualityChanged: function (targetQuality) {
+                appendRowToTable('information-table-2',
+                    createKeyValueTableRow('Video Quality changed:',
+                        ' Bitrate: ' + targetQuality.targetQuality.bitrate.valueOf() +
+                        ' Resolution: ' + targetQuality.targetQuality.height.valueOf()
+                    ));
+            },
+            onWarning: function (err) {
+                document.querySelector('#ad-warning').innerHTML = err.message;
+            }
+        }
+    };
+    analytics2 = bitmovin.analytics(analyticsConfig2);
+    analytics2.register(player2);
+    player2.setup(conf).then(function (value) {
+        console.log("Successfully created bitmovin player2 instance");
+    }, function (reason) {
+        console.log("Error while creating bitmovin player2 instance");
+    });
+    // end PLAYERS 2
+    // Functions
+    document.querySelector('#set-res-button').addEventListener('click', loadConfig);
+    document.querySelector('#unmute-button').addEventListener('click', unmute);
+    document.querySelector('#reset-button').addEventListener('click', reset);
+    document.querySelector('#play-button').addEventListener('click', play);
+    document.querySelector('#pause-button').addEventListener('click', pause);
+    function loadConfig() {
+        resetAdError();
+        var availableQ1 = player1.getAvailableVideoQualities();
+        var availableQ2 = player2.getAvailableVideoQualities();
+        var targetQ1, targetQ2;
+        var quality = document.getElementById('res-list').value || 'auto';
+        if (quality === 'auto') {
+            player1.setVideoQuality('auto');
+            player2.setVideoQuality('auto');
+        } else if (quality === '1080i') {
+            targetQ1 = findObjectByKey(availableQ1, 'height', '1080');
+            targetQ2 = findObjectByKey(availableQ2, 'height', '1080');
+            player1.setVideoQuality(targetQ1.id);
+            player2.setVideoQuality(targetQ2.id);
+        } else if (quality === '1080p') {
+            player1.setVideoQuality(availableQ1[availableQ1.length - 1].id);
+            player2.setVideoQuality(availableQ2[availableQ2.length - 1].id);
+        } else {
+            targetQ1 = findObjectByKey(availableQ1, 'height', quality);
+            targetQ2 = findObjectByKey(availableQ2, 'height', quality);
+            player1.setVideoQuality(targetQ1.id);
+            player2.setVideoQuality(targetQ2.id);
+        }
+    }
+    function reset() {
+        player1.setVideoQuality('auto');
+        player2.setVideoQuality('auto');
+    }
+    function unmute() {
+        player1.unmute();
+        player2.unmute();
+    }
+    function play() {
+        player1.play();
+        player2.play();
+    }
+    function pause() {
+        player1.pause();
+        player2.pause();
+    }
+    function resetAdError() {
+        document.querySelector('#ad-error').innerHTML = '';
+    }
+    function findObjectByKey(array, key, value) {
+        for (var i = 0; i < array.length; i++) {
+            if (array[i][key].toString() === value) {
+                return array[i];
+            }
+        }
+        return null;
+    }
+</script>
+
+
+<script type="text/javascript">
+    function toggle(divToToggleId) {
+        var div = document.getElementById(divToToggleId);
+        div.style.display = div.style.display == "none" ? "block" : "none";
+    }
+    (function closeDivs(divs) {
+        for (var i = 0; i < divs.length; i++) {
+            divs[i].style.display = "none";
+        }
+    })(document.getElementsByClassName("wrapper-closed"))
+</script>
+</body>
+</html>

@@ -49,7 +49,7 @@ By default 127.0.0.1 localhost should already be whitelisted but just in case do
 Once you have all the above set up, open up a browser and hit 127.0.0.1:8080 
 
 
-Full[Bitmovin API reference](https://bitmovin.com/encoding-documentation/bitmovin-api/) can be found on their website.
+Full [Bitmovin API reference](https://bitmovin.com/encoding-documentation/bitmovin-api/) can be found on their website.
 
 
 queryBuilder.js

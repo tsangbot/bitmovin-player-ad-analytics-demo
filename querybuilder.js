@@ -14,29 +14,40 @@ const argv  = yargs.option(
         describe: 'day(s) to look include for impression lookup',
         default: 1,
         type: 'number',
-        demand: true
+        demand: false
+    }
+).option(
+    'hoursToLookback',{
+        alias: 'h',
+        describe: 'hour(s) to look include for impression lookup',
+        default: null,
+        type: 'number',
+        demand: false
     }
 ).option(
     'metric',{
         alias: 'm',
-        describe: 'choose a specific mertric "IMPRESSION_ID","USER_ID","PLAYED"',
-        choices: ['IMPRESSION_ID','USER_ID','PLAYED'],
+        describe: 'choose a specific mertric "IMPRESSION_ID","USER_ID","PLAYED", "VIEWTIME"',
+        choices: ['IMPRESSION_ID','USER_ID','PLAYED','VIEWTIME'],
         demand: true
     }
 ).argv;
 
 // BITMOVING KEY(S)
 const BITMOVIN_API_KEY = 'd8e098d1-85e3-4b49-aa13-f8ac8acb443c';
+const TIME_QUERY =(argv.hoursToLookback !== null) ? argv.hoursToLookback : argv.daysToLookback;
+const TIME_VALUE = (argv.hoursToLookback !== null) ? 'hour' : 'day';
 
-
-console.log(argv.interval, argv.daysToLookback, argv.metric);
 
 const moment = require('moment');
 const bitmovin = new Bitmovin({ apiKey: BITMOVIN_API_KEY });
 const queryBuilder = bitmovin.analytics.queries.builder;
 
-const query = queryBuilder.count(argv.metric)
-  .between(moment().subtract(argv.daysToLookback, 'day').toDate(), moment().toDate())
+
+var query = (argv.metric !== "VIEWTIME") ? queryBuilder.count(argv.metric): queryBuilder.avg(argv.metric);
+
+query = query
+  .between(moment().subtract(TIME_QUERY, TIME_VALUE).toDate(), moment().toDate())
   .interval(argv.interval)
   .query();// this returns a JavaScript Promise
 

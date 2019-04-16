@@ -24,163 +24,93 @@
     </div>
 
     <div class="container">
-        <h2>Multi-Codec Support H.264/HEVC/VP9</h2>
+        <h2>Multi-Codec Support H.264/HVEC/VP9</h2>
         <div class="content">
-            <div class="player-wrapper">
-                <!-- dynamic text by js -->
-                <div class="title1">
-                    <h4>H.264/AVC</h4>
-                    <div id="player1"></div>
-                    <div class="description">
-                        <p>Video Statistics</p>
-                        <button onclick="toggle('video-information-table-wrapper')">Toggle</button>
-                    </div>
-                    <div id="video-information-table-wrapper" class="player-grid wrapper-closed">
-                        <table id="video-information-table">
-                            <tbody>
-                            </tbody>
+            <div class="description">
+                <p>This demo shows the video quality of VP9/H.265(HVEC) compare to H.264(AVC). </br>
+                    Ensuring the quality is not compromised, while significant bitrate reduction is
+                    archived. </br></br></br>
+                    Simply select the desired resolution using the dropdown below and click the "Set Video Resolution"
+                    button.</br>
+                    Logging will show up below each player, when video quality changes.
+                </p>
+            </div>
+        </div>
+        <div class="controls">
+            <div class="row">
+                <div class="col-sm-6 mb-3">
+                    <h4>Set Video Resolution</h4>
+                    <select id="res-list" class="form-control">
+                        <option selected="selected" value="auto">Auto</option>
+                        <option value="180">320x180</option>
+                        <option value="270">480x270</option>
+                        <option value="360">640x360</option>
+                        <option value="480">854x480</option>
+                        <option value="720">1280x720</option>
+                        <option value="1080i">Low 1920x1080</option>
+                        <option value="1080p">High 1920x1080</option>
+                    </select>
+                    <input id="set-res-button" class="btn btn-success mr-3 mt-2" type="button"
+                           value="Set Video Resolution">
+                    <input id="reset-button" class="btn btn-success mr-3 mt-2" type="button" value="Reset to Auto">
+                    <input id="unmute-button" class="btn btn-success mr-3 mt-2" type="button" value="Un-mute players">
+                </div>
+            </div>
+        </div>
+
+        <div class="player-wrapper">
+            <!-- dynamic text by js -->
+            <div class="title1">
+                <h4>H.264/AVC</h4>
+                <div id="player1"></div>
+                <div class="description">
+                    <p>Video Quality Information</p>
+                </div>
+                <div id="information-wrapper-1" class="player-grid">
+                    <div class="information">
+                        <table id="information-table-1">
+                            <tbody></tbody>
                         </table>
                     </div>
-                    <div class="description">
-                        <p>Client Information</p>
-                        <button onclick="toggle('information-wrapper')">Toggle</button>
-                    </div>
-                    <div id="information-wrapper" class="player-grid">
-                        <div class="information">
-                            <table id="information-table">
-                                <tbody>
-
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    <div class="description">
-                        <p>Adaptation Behaviour Graph</p>
-                        <button onclick="toggle('adaptation-behaviour-wrapper')">Toggle</button>
-                    </div>
-                    <div id="adaptation-behaviour-wrapper" class="player-grid" style="margin-top: 30px">
-                        <div id="adaptation-behaviour"></div>
-                    </div>
-                    <div class="description">
-                        <p>Impression Log</p>
-                        <button onclick="toggle('impression-log-wrapper')">Toggle</button>
-                    </div>
-                    <div id="impression-log-wrapper" class="player-grid wrapper-closed" style="margin-top: 30px">
-                        <div id="impression-log">
-                            <table id="impression-log-table">
-                                <thead>
-                                <tr>
-                                    <th>State</th>
-                                    <th>Player Startuptime</th>
-                                    <th>Video Startuptime</th>
-                                    <th>Duration</th>
-                                    <th>Buffered</th>
-                                    <th>Video Time Start</th>
-                                    <th>Video Time End</th>
-                                    <th>Played</th>
-                                    <th>Paused</th>
-                                    <th>Seeked</th>
-                                    <th>Video Bitrate</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    <div class="description">
-                        <p>Query responses from Bitmovin API</p>
-                        <button onclick="toggle('backend-calls-wrapper')">Toggle</button>
-                    </div>
-                    <div id="backend-calls-wrapper" class="player-grid wrapper-closed" style="margin-top: 30px">
-                        <div id="backend-calls">
-                            <table id="backend-calls-table">
-                                <tbody style="display: block">
-                                <tr></tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
                 </div>
-                <div class="title1">
-                    <h4>VP9</h4>
-                    <div id="player2"></div>
-                    <div class="description">
-                        <p>Video Statistics</p>
-                        <button onclick="toggle('video-information-table-wrapper-2')">Toggle</button>
-                    </div>
-                    <div id="video-information-table-wrapper-2" class="player-grid wrapper-closed">
-                        <table id="video-information-table-2">
-                            <tbody>
-                            </tbody>
+            </div>
+            <div class="title1">
+                <h4>VP9</h4>
+                <div id="player2"></div>
+                <div class="description">
+                    <p>Video Quality Information</p>
+                </div>
+                <div id="information-wrapper-2" class="player-grid">
+                    <div class="information">
+                        <table id="information-table-2">
+                            <tbody></tbody>
                         </table>
                     </div>
-                    <div class="description">
-                        <p>Client Information</p>
-                        <button onclick="toggle('information-wrapper-2')">Toggle</button>
-                    </div>
-                    <div id="information-wrapper-2" class="player-grid">
-                        <div class="information">
-                            <table id="information-table-2">
-                                <tbody>
-
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    <div class="description">
-                        <p>Adaptation Behaviour Graph</p>
-                        <button onclick="toggle('adaptation-behaviour-wrapper-2')">Toggle</button>
-                    </div>
-                    <div id="adaptation-behaviour-wrapper-2" class="player-grid" style="margin-top: 30px">
-                        <div id="adaptation-behaviour-2"></div>
-                    </div>
-                    <div class="description">
-                        <p>Impression Log</p>
-                        <button onclick="toggle('impression-log-wrapper-2')">Toggle</button>
-                    </div>
-                    <div id="impression-log-wrapper-2" class="player-grid wrapper-closed" style="margin-top: 30px">
-                        <div id="impression-log-2">
-                            <table id="impression-log-table-2">
-                                <thead>
-                                <tr>
-                                    <th>State</th>
-                                    <th>Player Startuptime</th>
-                                    <th>Video Startuptime</th>
-                                    <th>Duration</th>
-                                    <th>Buffered</th>
-                                    <th>Video Time Start</th>
-                                    <th>Video Time End</th>
-                                    <th>Played</th>
-                                    <th>Paused</th>
-                                    <th>Seeked</th>
-                                    <th>Video Bitrate</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    <div class="description">
-                        <p>Query responses from Bitmovin API</p>
-                        <button onclick="toggle('backend-calls-wrapper-2')">Toggle</button>
-                    </div>
-                    <div id="backend-calls-wrapper-2" class="player-grid wrapper-closed" style="margin-top: 30px">
-                        <div id="backend-calls-2">
-                            <table id="backend-calls-table-2">
-                                <tbody style="display: block">
-                                <tr></tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+
+<div class="content">
+    <div id="information-wrapper" class="player-grid">
+        <div class="information">
+            <table id="information-table">
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div id="ad-error"></div>
+        </div>
+        <div class="col-md-12">
+            <div id="ad-warning"></div>
+        </div>
+    </div>
+</div>
+
 
 <script type="text/javascript">
 
@@ -188,6 +118,7 @@
     const BITMOVIN_PLAYER_KEY = '3d1aeff2-cc32-4eb4-b4e8-0699af6823de';
     const BITMOVIN_ANALYTICS_KEY = '58add32c-46b7-4a18-8b73-71613c0c33be';
     var t = new Date().getTime();
+    var player1Quality, player2Quality, targetQuality;
 
     // Browser detection
     // Chrome 1+
@@ -202,191 +133,175 @@
     var vp9 = 'http://bitmovin-a.akamaihd.net/content/multi-codec/vp9/stream.mpd';
     var hvec = 'http://bitmovin-a.akamaihd.net/content/dataset/multi-codec/hevc/stream.mpd';
     var defaultDash = 'http://bitdash-a.akamaihd.net/content/MI201109210084_1/mpds/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.mpd';
+    var defaultHLS = 'https://bitdash-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8';
+
+    var dashSource, hlsSource;
+    if (isChrome) {
+        dashSource = vp9;
+    } else if (isFirefox) {
+        dashSource = vp9;
+    } else if (isSafari) {
+        hlsSource = hvec;
+        document.getElementsByTagName("h4")[2].innerHTML = "H.265/HVEC";
+    } else {
+        dashSource = defaultDash;
+        hlsSource = defaultHLS;
+    }
 
 
-    var Realtime = function () {
-        var analyticsConfig = {
-            key: BITMOVIN_ANALYTICS_KEY,
-            playerKey: BITMOVIN_PLAYER_KEY,
-            player: bitmovin.analytics.Players.BITMOVIN,
-            cdnProvider: bitmovin.analytics.CdnProviders.AKAMAI,
-            videoId: 'CODEC-DEMO-' + t,
-            customData1: 'CODEC-SESSION' + t,
-            userId: 'CODEC-USER1'
-        };
+    // PLAYERS 1
+    var analyticsConfig1 = {
+        key: BITMOVIN_ANALYTICS_KEY,
+        playerKey: BITMOVIN_PLAYER_KEY,
 
-        var playerConfig = {
-            key: BITMOVIN_PLAYER_KEY,
-            playback: {
-                muted: true
+        player: bitmovin.analytics.Players.BITMOVIN,
+        cdnProvider: bitmovin.analytics.CdnProviders.AKAMAI,
+        videoId: 'CODEC-DEMO-1-' + t,
+        customData1: 'CODEC-DEMO1-SESSION' + t,
+        userId: 'CODEC-USER1'
+    };
+    var player1 = bitmovin.player("player1");
+    var conf1 = {
+        key: BITMOVIN_PLAYER_KEY,
+        playback: {
+            autoplay: false,
+            muted: true,
+        },
+        source: {
+            dash: 'https://bitmovin-a.akamaihd.net/content/multi-codec/h264/stream.mpd',
+            hls: 'https://bitdash-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8',
+            progressive: 'https://bitdash-a.akamaihd.net/content/MI201109210084_1/MI201109210084_mpeg-4_hd_high_1080p25_10mbits.mp4',
+
+        },
+        events: {
+            onVideoPlaybackQualityChanged: function (targetQuality) {
+                appendRowToTable('information-table-1',
+                    createKeyValueTableRow('Video Quality changed:',
+                        ' Bitrate: ' + targetQuality.targetQuality.bitrate.valueOf() +
+                        ' Resolution: ' + targetQuality.targetQuality.height.valueOf()
+                    ));
             },
-            source: {
-                dash: 'https://bitmovin-a.akamaihd.net/content/multi-codec/h264/stream.mpd',
-                hls: 'https://bitdash-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8',
-                progressive: 'https://bitdash-a.akamaihd.net/content/MI201109210084_1/MI201109210084_mpeg-4_hd_high_1080p25_10mbits.mp4',
-            },
-            style: {
-                width: '100%',
-                aspectratio: '16:9'
-            },
-            events: {
-                onReady: handleOnReady,
-                onPlay: handleOnPlay,
-                onPlaybackFinished: function () {
-                    window.clearTimeout(onPlayTimeout);
-                    window.clearInterval(impressionPollingInterval);
-
-                }
+            onWarning: function (err) {
+                document.querySelector('#ad-warning').innerHTML = err.message;
             }
-        };
+        }
+    };
+    analytics1 = bitmovin.analytics(analyticsConfig1);
+    analytics1.register(player1);
 
-        this.start = function () {
-            analytics = bitmovin.analytics(analyticsConfig);
-            player = bitmovin.player('player1');
+    player1.setup(conf1).then(function (value) {
+        console.log("Successfully created bitmovin player1 instance");
+    }, function (reason) {
+        console.log("Error while creating bitmovin player1 instance");
+    });
+    // end PLAYERS 1
 
-            analytics.register(player);
-            player.setup(playerConfig);
+    // PLAYERS 2
+    var analyticsConfig2 = {
+        key: BITMOVIN_ANALYTICS_KEY,
+        playerKey: BITMOVIN_PLAYER_KEY,
+        player: bitmovin.analytics.Players.BITMOVIN,
+        cdnProvider: bitmovin.analytics.CdnProviders.AKAMAI,
+        videoId: 'CODEC-DEMO-2-' + t,
+        customData1: 'CODEC-DEMO2-SESSION' + t,
+        userId: 'CODEC-USER2'
+    };
+    var player2 = bitmovin.player("player2");
+    var conf = {
+        key: BITMOVIN_PLAYER_KEY,
+        playback: {
+            autoplay: false,
+            muted: true,
+        },
+        source: {
+            dash: dashSource,
+            hls: hlsSource,
+            progressive: 'https://bitdash-a.akamaihd.net/content/MI201109210084_1/MI201109210084_mpeg-4_hd_high_1080p25_10mbits.mp4',
 
-            initCurrentImpressionChart('adaptation-behaviour');
-            getVideoStatistics(analyticsConfig.videoId, 'video-information-table');
-        };
+        },
+        events: {
+            onVideoPlaybackQualityChanged: function (targetQuality) {
+                appendRowToTable('information-table-2',
+                    createKeyValueTableRow('Video Quality changed:',
+                        ' Bitrate: ' + targetQuality.targetQuality.bitrate.valueOf() +
+                        ' Resolution: ' + targetQuality.targetQuality.height.valueOf()
+                    ));
+            },
+            onWarning: function (err) {
+                document.querySelector('#ad-warning').innerHTML = err.message;
+            }
+        }
     };
 
-    var condecSource;
-     if (isChrome) {
-         condecSource = vp9;
-     } else if (isFirefox) {
-         condecSource = vp9;
-     } else if (isSafari) {
-         condecSource = hvec;
-         document.getElementsByTagName("h4")[1].innerHTML = "H.265/HVEC";
-     } else {
-         condecSource = defaultDash;
-     }
-
-    var Realtime2 = function () {
-        var analyticsConfig = {
-            key: BITMOVIN_ANALYTICS_KEY,
-            playerKey: BITMOVIN_PLAYER_KEY,
-            player: bitmovin.analytics.Players.BITMOVIN,
-            cdnProvider: bitmovin.analytics.CdnProviders.AKAMAI,
-            videoId: 'CODEC-DEMO-' + t,
-            customData1: 'CODEC-SESSION' + t,
-            userId: 'CODEC-USER1'
-        };
-
-        var playerConfig = {
-            key: BITMOVIN_PLAYER_KEY,
-            playback: {
-                muted: true
-            },
-            source: {
-                dash: condecSource,
-                hls: 'https://bitdash-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8',
-                progressive: 'https://bitdash-a.akamaihd.net/content/MI201109210084_1/MI201109210084_mpeg-4_hd_high_1080p25_10mbits.mp4',
-            },
-            style: {
-                width: '100%',
-                aspectratio: '16:9'
-            },
-            events: {
-                onReady: handleOnReady,
-                onPlay: handleOnPlay,
-                onPlaybackFinished: function () {
-                    window.clearTimeout(onPlayTimeout);
-                    window.clearInterval(impressionPollingInterval);
-
-                }
-            }
-        };
-
-        this.start = function () {
-            analytics = bitmovin.analytics(analyticsConfig);
-            player = bitmovin.player('player2');
-
-            analytics.register(player);
-            player.setup(playerConfig);
-
-            initCurrentImpressionChart('adaptation-behaviour-2');
-            getVideoStatistics(analyticsConfig.videoId, 'video-information-table-2');
-        };
-    };
+    analytics2 = bitmovin.analytics(analyticsConfig2);
+    analytics2.register(player2);
+    player2.setup(conf).then(function (value) {
+        console.log("Successfully created bitmovin player2 instance");
+    }, function (reason) {
+        console.log("Error while creating bitmovin player2 instance");
+    });
+    // end PLAYERS 2
 
 
-    // PLAYERS 1,2
-    //
-    //  var player = bitmovin.player("player1");
-    //  var conf = {
-    //      key: BITMOVIN_PLAYER_KEY,
-    //      playback: {
-    //          autoplay: true,
-    //          muted: true
-    //      },
-    //      source: {
-    //                dash: 'https://bitmovin-a.akamaihd.net/content/multi-codec/h264/stream.mpd',
-    //                hls: 'https://bitdash-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8',
-    //                progressive: 'https://bitdash-a.akamaihd.net/content/MI201109210084_1/MI201109210084_mpeg-4_hd_high_1080p25_10mbits.mp4',
-    //
-    //      },
-    //  };
-    //
-    // player.setup(conf).then(function (value) {
-    //     console.log("Successfully created bitmovin player1 instance");
-    // }, function (reason) {
-    //     console.log("Error while creating bitmovin player1 instance");
-    // });
-    //
-    //  var player = bitmovin.player("player2");
-    //  var vp9 = 'http://bitmovin-a.akamaihd.net/content/multi-codec/vp9/stream.mpd';
-    //  var hvec = 'http://bitmovin-a.akamaihd.net/content/dataset/multi-codec/hevc/stream.mpd';
-    //  var defaultDash = 'http://bitdash-a.akamaihd.net/content/MI201109210084_1/mpds/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.mpd';
-    //
-    //  if (isChrome) {
-    //      condecSource = vp9;
-    //  } else if (isFirefox) {
-    //      condecSource = vp9;
-    //  } else if (isSafari) {
-    //      condecSource = hvec;
-    //      document.getElementsByTagName("h4")[1].innerHTML = "H.265/HVEC";
-    //  } else {
-    //      condecSource = defaultDash;
-    //  }
-    //
-    //  var conf = {
-    //     key: BITMOVIN_PLAYER_KEY,
-    //     playback: {
-    //          autoplay: true,
-    //          muted: true
-    //      },
-    //     source: {
-    //               dash: condecSource,
-    //               hls: 'https://bitdash-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8',
-    //               progressive: 'https://bitdash-a.akamaihd.net/content/MI201109210084_1/MI201109210084_mpeg-4_hd_high_1080p25_10mbits.mp4',
-    //
-    //     }
-    //  };
-    //
-    //  player.setup(conf).then(function (value) {
-    //      console.log("Successfully created bitmovin player2 instance");
-    //  }, function (reason) {
-    //      console.log("Error while creating bitmovin player2 instance");
-    //  });
-</script>
+    // Functions
+    document.querySelector('#set-res-button').addEventListener('click', loadConfig);
+    document.querySelector('#unmute-button').addEventListener('click', unmute);
+    document.querySelector('#reset-button').addEventListener('click', reset);
 
-<script type="text/javascript">
-    (function () {
-        if (location.protocol === "file:") {
-            document.getElementById("webserver-warning").style.display = "block";
-            return;
+
+    function loadConfig() {
+        resetAdError();
+        var availableQ1 = player1.getAvailableVideoQualities();
+        var availableQ2 = player2.getAvailableVideoQualities();
+        var targetQ1, targetQ2;
+        var quality = document.getElementById('res-list').value || 'auto';
+        if (quality === 'auto') {
+            player1.setVideoQuality('auto');
+            player2.setVideoQuality('auto');
+        } else if (quality === '1080i') {
+            targetQ1 = findObjectByKey(availableQ1, 'height', '1080');
+            targetQ2 = findObjectByKey(availableQ2, 'height', '1080');
+
+            player1.setVideoQuality(targetQ1.id);
+            player2.setVideoQuality(targetQ2.id);
+        } else if (quality === '1080p') {
+            player1.setVideoQuality(availableQ1[availableQ1.length - 1].id);
+            player2.setVideoQuality(availableQ2[availableQ2.length - 1].id);
+        } else {
+            targetQ1 = findObjectByKey(availableQ1, 'height', quality);
+            targetQ2 = findObjectByKey(availableQ2, 'height', quality);
+
+            player1.setVideoQuality(targetQ1.id);
+            player2.setVideoQuality(targetQ2.id);
         }
 
-        var realtime = new Realtime();
-        realtime.start();
 
-        var realtime2 = new Realtime2();
-        realtime2.start();
-    })();
+    }
+
+    function reset() {
+        player1.setVideoQuality('auto');
+        player2.setVideoQuality('auto');
+    }
+
+    function unmute() {
+        player1.unmute();
+        player2.unmute();
+    }
+
+    function resetAdError() {
+        document.querySelector('#ad-error').innerHTML = '';
+    }
+
+    function findObjectByKey(array, key, value) {
+        for (var i = 0; i < array.length; i++) {
+            if (array[i][key].toString() === value) {
+                return array[i];
+            }
+        }
+        return null;
+    }
 </script>
+
 
 <script type="text/javascript">
     function toggle(divToToggleId) {

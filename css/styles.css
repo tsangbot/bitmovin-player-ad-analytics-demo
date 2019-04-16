@@ -151,6 +151,7 @@ a:hover {
 }
 
 
+
 /*add more here*/
  figure {
      margin: 0;
@@ -194,6 +195,9 @@ a:hover {
      display: none;
  }
 
+ .player-grid wrapper-closed{
+     width: 350px;
+ }
 
  .player-window-main {
      width: 60%;
@@ -211,9 +215,10 @@ a:hover {
      white-space: nowrap;
  }
  table {
+     margin-left: -40px;
      color: #333;
      border-collapse: collapse;
-     width: 100%;
+     width: 450px;
      border-spacing: 0;
  }
  td, th {
